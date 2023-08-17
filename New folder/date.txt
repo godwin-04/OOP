@@ -1,0 +1,86 @@
+public class Agecalc {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter your date of birth (YYYY-MM-DD):");
+        String dobString = scanner.nextLine();
+
+  
+        LocalDate dob = LocalDate.parse(dobString);
+
+      
+        LocalDate currentDate = LocalDate.now();
+
+    
+        Period age = Period.between(dob, currentDate);
+
+     
+        System.out.println("Your age is: " + age.getYears() + " years, " + age.getMonths() + " months, and " + age.getDays() + " days.");
+    }
+    
+}
+public class P6_2 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        HourlyWorker hw1=new HourlyWorker("ABC",200);
+        SalariedWorker sw1= new SalariedWorker("XYZ",500);
+        double hw1_sal=hw1.compute(hw1,50);
+        System.out.println("Pay of "+hw1.name+": "+hw1_sal);
+        double sw1_sal=sw1.compute(sw1,50);
+        System.out.println("Pay of "+sw1.name+": "+sw1_sal);
+    }
+    
+}
+public class Worker {
+    String name;
+    double salaryRate;
+    
+    Worker(String name, double salaryRate){
+        this.name=name;
+        this.salaryRate=salaryRate;
+    }
+    
+    double computePay(int hours){
+        return salaryRate*hours;
+    }
+    
+    public static double compute(Worker w, int hours){
+        return w.computePay(hours);
+    }
+}
+public class HourlyWorker extends Worker {
+    HourlyWorker(String name,double salaryRate){
+        super(name,salaryRate);
+    }
+    
+    @Override
+    double computePay(int hours){
+        if(hours<=40){
+            return hours*salaryRate;
+        }else{
+            int overtime=hours-40;
+            return (40*salaryRate)+(1.5*salaryRate*overtime);
+        }
+    }
+}
+public class SalariedWorker extends Worker{
+
+    public SalariedWorker(String name, double salaryRate) {
+        super(name, salaryRate);
+    }
+    @Override
+    double computePay(int hours){
+  
+        return 40*salaryRate;
+        
+    }
+    
+}

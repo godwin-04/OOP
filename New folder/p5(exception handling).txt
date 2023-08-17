@@ -1,0 +1,140 @@
+public class Student {
+
+String Name;
+int CGPA;
+String EnrollmentNumber;
+String password;
+
+Student(String Name, int CGPA, String EnrollmentNumber, String password) {
+this.Name = Name;
+this.CGPA = CGPA;
+this.EnrollmentNumber = EnrollmentNumber;
+this.password = password;
+}
+
+void cgpacheck() throws enroll {
+if (CGPA >= 0 && CGPA <= 10) {
+System.out.println("cgpa enetered is valid");
+} else {
+
+throw new enroll("cgpa issue");
+}
+}
+void enrollcheck() throws enroll {
+char[] arr = new char[EnrollmentNumber.length()];
+arr = EnrollmentNumber.toCharArray();
+boolean first, second, third, fourth;
+if (arr[0] == 'B' && arr[1] == 'E') {
+first = true;
+} else {
+throw new enroll("BE missing");
+}
+
+if (arr[2] == '2' && (arr[3] == '0' || arr[3] == '1' || arr[3] == '2' || arr[3] == '3')) {
+second = true;
+} else {
+throw new enroll("valid year missing");
+}
+if ((arr[4] == 'C' && arr[5] == 'S' && arr[6] == 'U') || (arr[4] == 'E' && arr[5] == 'C' && arr[6]
+== 'E') || (arr[4] == 'E' && arr[5] == 'N' && arr[6] == 'U')) {
+third = true;
+} else {
+throw new enroll("valid branch missing");
+}
+String s = EnrollmentNumber.substring(7, 10);
+int num = Integer.parseInt(s);
+if (num >= 1 && num <= 250) {
+fourth = true;
+} else {
+
+throw new enroll("valid roll no missing");
+}
+
+if (first == true && second == true && third == true && fourth == true) {
+System.out.println("the entered enrollment number is valid");
+}
+
+}
+
+void passwordCheck() throws enroll {
+int number = password.length();
+char[] marks = password.toCharArray();
+boolean hasSmallLetter = false;
+boolean hasCapitalLetter = false;
+boolean hasSpecialChar = false;
+boolean hasNumber = false;
+
+for (int i = 0; i < number; i++) {
+if (Character.isLowerCase(marks[i])) {
+hasSmallLetter = true;
+} else if (Character.isUpperCase(marks[i])) {
+hasCapitalLetter = true;
+} else if (marks[i] == '@') {
+hasSpecialChar = true;
+} else if (Character.isDigit(marks[i])) {
+hasNumber = true;
+}
+}
+
+if (hasSmallLetter && hasCapitalLetter && hasSpecialChar && hasNumber &&
+number > 8) {
+System.out.println("Entered password is correct");
+} else {
+if (!hasSmallLetter) {
+throw new enroll("Small letter missing");
+}
+if (!hasCapitalLetter) {
+throw new enroll("Capital letter missing");
+}
+if (!hasSpecialChar) {
+throw new enroll("Special character missing");
+}
+if (!hasNumber) {
+throw new enroll("Numerical digit missing");
+}
+if (number <= 8) {
+throw new enroll("Length is less than 8");
+}
+}
+}
+}
+public class cgpa extends Exception {
+@Override
+public java.lang.String toString() {
+return super.toString();
+}
+}
+
+public class enroll extends Exception {
+String detail;
+enroll(String s)
+{
+detail=s;
+}
+@Override
+public java.lang.String toString() {
+return "Enroll: "+detail ;
+}
+}
+public class password extends Exception{
+@Override
+public java.lang.String toString() {
+return super.toString();
+}
+}
+public class main {
+public static void main(String[] args) {
+Student se = new Student("Pavan", 9, "BE21CSU027", "pawar2@2");
+
+try {
+se.enrollcheck();
+se.cgpacheck();
+se.passwordCheck();
+
+} catch(enroll d) {
+System.out.println("thank you");
+d.printStackTrace();
+
+}
+}
+}

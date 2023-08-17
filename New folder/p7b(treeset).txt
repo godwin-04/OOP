@@ -1,0 +1,111 @@
+import java.util.*;
+public class Main {
+public static void main(String[] args) {
+PhoneDirectory directory = new PhoneDirectory();
+try {
+Student s1=new Student(1, "ABC", 3, "Nagpur", "1234567890");
+Student s2=new Student(2, "DEF", 2, "Mumbai", "9876543210");
+Student s3=new Student(3, "PQR", 4, "Nagpur", "1112223333");
+Student s4=new Student(4, "XYZ", 3, "Pune", "5556667777");
+directory.addStudent(s1);
+directory.addStudent(s2);
+directory.addStudent(s3);
+directory.addStudent(s4);
+System.out.println("All Students:");
+TreeSet<Student> allStudents = directory.viewAllStudents();
+for (Student student : allStudents) {
+System.out.println(student);
+}
+System.out.println();
+System.out.println("Students in Nagpur");
+TreeSet<Student> nyStudents = directory.viewStudentsByCity("Nagpur");
+for (Student student : nyStudents) {
+System.out.println(student);
+}
+System.out.println();
+directory.removeStudent(s3);
+allStudents = directory.viewAllStudents();
+System.out.println("All Students:");
+for (Student student : allStudents) {
+System.out.println(student);
+}
+System.out.println();
+directory.addStudent(new Student(5, "", 2, "Pune", "")); // This will throw
+MissingDataException
+
+} catch (MissingDataException e) {
+System.out.println("Exception: " + e.getMessage());
+}
+}
+}
+
+public class MissingDataException extends Exception{
+public MissingDataException(String message) {
+super(message);
+}
+}
+public class Student {
+int roll;
+String name;
+int semester;
+String city;
+String contact;
+public Student(int roll, String name, int semester, String city, String
+contact) {
+this.roll = roll;
+this.name = name;
+this.semester = semester;
+this.city = city;
+this.contact = contact;
+}
+
+@Override
+public String toString() {
+return "Roll: " + roll +
+", Name: " + name +
+", Semester: " + semester +
+", City: " + city +
+", Contact: " + contact;
+}
+}
+import java.util.*;
+public class StudentComparator implements Comparator<Student>{
+@Override
+public int compare(Student s1, Student s2) {
+if (s1.semester == s2.semester) {
+return s1.roll - s2.roll;
+
+}
+return s1.semester - s2.semester;
+}
+}
+
+import java.util.*;
+public class PhoneDirectory {
+TreeSet<Student> students;
+public PhoneDirectory() {
+students = new TreeSet<>(new StudentComparator());
+}
+public void addStudent(Student student) throws MissingDataException {
+if (student.roll <= 0 || student.name.isEmpty() || student.semester <= 0 ||
+student.city.isEmpty() || student.contact.isEmpty()) {
+throw new MissingDataException("Missing data for student");
+}
+students.add(student);
+}
+public void removeStudent(Student student) {
+students.remove(student);
+}
+public TreeSet<Student> viewAllStudents() {
+return students;
+}
+public TreeSet<Student> viewStudentsByCity(String city) {
+TreeSet<Student> result = new TreeSet<>(new StudentComparator());
+for (Student student : students) {
+if (student.city.equalsIgnoreCase(city)) {
+result.add(student);
+}
+}
+return result;
+}
+}
