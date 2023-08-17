@@ -1,0 +1,124 @@
+public class BankAccount {
+static int Ac_no=0;
+int ac_no;
+int ad_no;
+String o_nm;
+double roi=4;
+double balance;
+BankAccount(int ad_no,String o_nm){
+Ac_no+=1;
+this.ac_no=Ac_no;
+this.ad_no=ad_no;
+this.o_nm=o_nm;
+this.balance=0;
+}
+void openAccount(){
+System.out.println("Account no.: "+ac_no+" opened for "+o_nm);
+}
+void closeAccount(){
+System.out.println("Account no. "+ac_no+" closed.");
+balance=0;
+}
+void deposit(double amount){
+balance+=amount;
+}
+void updateInterest(){
+double interest=(balance*4)/100;
+balance+=interest;
+}
+
+}
+
+public interface Debitable {
+void withdraw(double amount);
+}
+
+class FixedDeposit extends BankAccount{
+static int Ac_no=55000;
+int lip;
+FixedDeposit(int ad_no,String o_nm,int lip){
+super(ad_no,o_nm);
+Ac_no+=1;
+this.ac_no=Ac_no;
+this.lip=lip;
+if(lip<=2){
+roi=6;
+}
+else if(lip>2 && lip<=5){
+roi=6.5;
+}
+else{
+roi=7;
+}
+}
+@Override
+void updateInterest(){
+double interest=(balance*roi*lip)/100;
+balance+=interest;
+}
+@Override
+void closeAccount(){
+double closure=(balance*5)/100;
+balance-=closure;
+System.out.println("amount of "+closure+" charged for closure of FD");
+super.closeAccount();
+}
+}
+
+public class SavingAccount extends BankAccount implements Debitable{
+static int Ac_no=11000;
+
+SavingAccount(int ad_no,String o_nm){
+super(ad_no,o_nm);
+Ac_no+=1;
+this.ac_no=Ac_no;
+}
+
+@Override
+public void withdraw(double amount){
+if(amount>balance){
+System.out.println("insufficient balance");
+}
+else{
+balance-=amount;
+}
+}
+}
+
+public class Main {
+public static void main(String[] args) {
+BankAccount ba=new BankAccount(1245124567,"XYZ");
+ba.openAccount();
+ba.deposit(5000);
+System.out.println("current balance: "+ba.balance);
+ba.closeAccount();
+System.out.println();
+BankAccount ba1=new BankAccount(1245124568,"PQR");
+ba1.openAccount();
+ba1.deposit(5000);
+System.out.println("current balance: "+ba1.balance);
+ba1.closeAccount();
+System.out.println();
+FixedDeposit fda=new FixedDeposit(123456789,"ABC",5);
+fda.openAccount();
+fda.deposit(100000);
+fda.updateInterest();
+fda.closeAccount();
+System.out.println();
+FixedDeposit fda1=new FixedDeposit(123456789,"JKL",5);
+fda1.openAccount();
+
+fda1.deposit(110000);
+fda1.updateInterest();
+fda1.closeAccount();
+System.out.println();
+SavingAccount sa=new SavingAccount(123321123,"DEF");
+sa.openAccount();
+sa.deposit(20000);
+sa.withdraw(50000);
+sa.withdraw(500);
+System.out.println("current balance: "+sa.balance);
+sa.updateInterest();
+sa.closeAccount();
+}
+}
